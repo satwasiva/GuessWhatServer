@@ -14,9 +14,9 @@ class PlayerGamePayload extends PlayerBaseEntity
 
     public static $_json_fields = array(
         "special_bonus"            => array("string", "none", false),
-        "puzzles_created"          => array("string", "none", false),
-        "puzzles_solved"           => array("string", "none", false),
-        "puzzles_pending"          => array("string", "none", false)
+        "puzzles_created"          => array("string", "none", false), // comma separated puzzle ids list created by player id
+        "puzzles_solved"           => array("string", "none", false), // comma separated puzzle ids list solved by player id
+        "puzzles_pending"          => array("string", "none", false) // comma separated puzzle ids list being worked on by player id
     );
 
     public $special_bonus;

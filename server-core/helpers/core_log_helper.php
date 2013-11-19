@@ -63,7 +63,7 @@ if (!defined('core_log_helper')) {
         $logger = KLogger::instance(LOG_DIRECTORY, 1);
         $file_segments = explode('/', $file);
         $logger->logWarn(end($file_segments) . ' - ' . $message);
-        send_server_warn_to_analytics($file, $message, $warn_type);
+        //send_server_warn_to_analytics($file, $message, $warn_type);
     }
 
     function error($file, $message, $is_from_error_handler = false) {
@@ -92,7 +92,7 @@ if (!defined('core_log_helper')) {
                 $line_no = substr($stack_trace_array[1], strpos($stack_trace_array[1], "(") + 1, ( strpos($stack_trace_array[1], ")") - strpos($stack_trace_array[1], "(") - 1 ) );
             }
 
-            send_server_error_to_analytics($file, $line_no, $message, get_server_error_type($message));
+            //send_server_error_to_analytics($file, $line_no, $message, get_server_error_type($message));
             //output the stack when testing on a browser and make it easier to read the error stack
             if (ENVIRONMENT == 'dev' && isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'Mozilla') !== FALSE) {
                 echo "<br/>ERROR: " . $message;

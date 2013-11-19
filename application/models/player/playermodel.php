@@ -2,7 +2,6 @@
 
 require_once(dirname(__FILE__) .'/Player.php');
 require_once(COREPATH . 'models/jsonmodel.php');
-require_once(APPPATH . 'models/GameProperties.php');
 require_once(APPPATH . 'config/gameconstants.php');
 require_once(APPPATH . 'models/SharedGameProperties.php');
 //require_once(APPPATH . 'models/request/GameRequest.php');
@@ -21,14 +20,14 @@ class PlayerModel extends JsonModel {
 
     function create() {
         $player = new Player();
-        $game_props = GameProperties::get_instance();
+        $game_props = SharedGameProperties::get_instance();
         $sDate = date('Y-m-d H:i:s');
         $player->time_created = $sDate;
         $player->time_updated = $sDate;
         $player->version = 0;
         $player->username = 'Guest';
         $player->game_account_created = true;
-        $player->increase_coins($game_props->initial_money);
+        $player->increase_points($game_props->initial_points);
         $player->is_spender = 0;
         $player->experience = 0;
         $player->level = 1;
@@ -39,7 +38,7 @@ class PlayerModel extends JsonModel {
         $player->last_game_load_time = 0;
         $player->num_game_loads = 0;
         $player->server_sequence_num = 0;
-        $player->total_coins_earned = 0;
+        $player->total_points_earned = 0;
         $player->percent_level_complete = 0;
         $player->total_usd_spent_to_date = 0;
         $player->session_id = 1;

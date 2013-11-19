@@ -188,15 +188,4 @@ class PlayerGamePayloadModel extends JsonModel
         return $special_bonus;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
+?>

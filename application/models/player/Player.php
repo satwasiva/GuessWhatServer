@@ -3,7 +3,7 @@
 require_once(COREPATH . 'models/playerbaseentity.php');
 require_once(APPPATH . 'config/gameconstants.php');
 require_once(COREPATH . 'libraries/DateTime_52.php');
-require_once(APPPATH . 'models/GameProperties.php');
+require_once(APPPATH . 'models/SharedGameProperties.php');
 
 /**
  * This class holds the primary game state for a player in the game.
@@ -28,7 +28,7 @@ class Player extends PlayerBaseEntity {
     public static $_json_fields = array(
         "invite_code"                   => array("string", "none", false),
         "username"                      => array("string", "none", false),
-    	"coins"                         => array("int", 0, false),
+    	"points"                        => array("int", 0, false),
         "is_spender"                    => array("int", "none", false),
         "experience"                    => array("float", "0", false),
         "level"                         => array("int", "none", false),
@@ -43,7 +43,7 @@ class Player extends PlayerBaseEntity {
     	"available_vip_invites"         => array("int", "none", false),
     	"invite_vip_time"           	=> array("datetime", "none", false),
         "percent_level_complete"        => array("int", "none", false),
-        "total_coins_earned"            => array("float", "none", false),
+        "total_points_earned"            => array("float", "none", false),
         "total_usd_spent_to_date"       => array("int", "none", false),
         "seconds_from_gmt"              => array("int", "none", false),
         "game_payload"                  => array("string", "none", false),
@@ -60,7 +60,7 @@ class Player extends PlayerBaseEntity {
 
     public $invite_code;
     public $username;
-    public $coins;
+    public $points;
     public $money;
     public $is_spender;
     public $experience;
@@ -77,7 +77,7 @@ class Player extends PlayerBaseEntity {
     public $invite_vip_time;
 
     //Analytics fields
-    public $total_coins_earned;
+    public $total_points_earned;
     public $percent_level_complete;
     public $total_usd_spent_to_date;
     public $seconds_from_gmt;
@@ -118,12 +118,12 @@ class Player extends PlayerBaseEntity {
         return $minutes;
     }
 
-    public function increase_coins($amount, $coins_earned = false) {
+    public function increase_points($amount, $points_earned = false) {
         if(is_numeric($amount)){
-            $money = (int) ($this->coins + ($amount * 100));
-            $this->coins = ($money > 0) ? $money : 0;
-            if ($coins_earned) {
-                $this->total_coins_earned += $amount;
+            $money = (int) ($this->points + ($amount * 100));
+            $this->points = ($money > 0) ? $money : 0;
+            if ($points_earned) {
+                $this->total_points_earned += $amount;
             }
         }
     }
@@ -148,13 +148,13 @@ class Player extends PlayerBaseEntity {
             'player_id' => $this->player_id,
             'player_is_spender' => $this->is_spender,
             'player_ab_test' => $this->ab_test,
-            'player_sc1_balance' => $this->get_coins(),
+            'player_sc1_balance' => $this->get_points(),
             'player_num_totems' => 0, //TODO - kjs - This is per game now!
             'player_filter' => $this->is_test_account,
             'player_num_game_loads' => $this->num_game_loads,
             'player_percent_level_complete' => $this->percent_level_complete,
             'player_time_created' => $this->time_created,
-            'player_total_sc1_earned' => $this->total_coins_earned,
+            'player_total_sc1_earned' => $this->total_points_earned,
             'player_country_code' => $this->get_country_code())
         ); */
     }
@@ -181,21 +181,21 @@ class Player extends PlayerBaseEntity {
         }
     }
 
-    public function decrease_coins($amount){
+    public function decrease_points($amount){
         if(is_numeric($amount)){
-            $this->increase_coins(-$amount);
+            $this->increase_points(-$amount);
         }
     }
 
-    public function get_coins(){
-        return round(($this->coins / 100), 2);
+    public function get_points(){
+        return round(($this->points / 100), 2);
     }
 
     public function get_updated_client_obj_to_return() {
         //For client compatibility!
         $CI = & get_instance();
         //$CI->load->model('player/game_payload/PlayerGamePayloadModel');
-        $this->money = $this->get_coins();
+        $this->money = $this->get_points();
         //$this->game_payload = $CI->PlayerGamePayloadModel->get_client_game_payload($this->id);
     }
 
@@ -225,12 +225,12 @@ class Player extends PlayerBaseEntity {
                 'player_id' => $this->player_id,
                 'player_is_spender' => $this->is_spender,
                 'player_ab_test' => $this->ab_test,
-                'player_sc1_balance' => $this->get_coins(),
+                'player_sc1_balance' => $this->get_points(),
                 'player_filter' => $this->is_test_account,
                 'player_num_game_loads' => $this->num_game_loads,
                 'player_percent_level_complete' => $this->percent_level_complete,
                 'player_time_created' => $this->time_created,
-                'player_total_sc1_earned' => $this->total_coins_earned,
+                'player_total_sc1_earned' => $this->total_points_earned,
                 'player_country_code' => $this->get_country_code(),
                 'current_machine_version' => $curr_machine->version,
                 'current_machine_name' => $curr_machine->name,
@@ -249,7 +249,7 @@ class Player extends PlayerBaseEntity {
             if ($curr_level->level < $new_level->level)
             {
                 $this->level_up = 1;
-                $this->increase_coins($new_level->welcome_reward, true);
+                $this->increase_points($new_level->welcome_reward, true);
                 player_level_up($this);
             }
 
@@ -303,7 +303,7 @@ class Player extends PlayerBaseEntity {
     public function get_token_for_md5($client_version)
     {
         $token = "";
-        $token .= $this->get_coins();
+        $token .= $this->get_points();
         $token .= $this->experience;
         $token .= $this->level;
 

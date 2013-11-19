@@ -145,7 +145,6 @@ if (!defined('service_helper')) {
     {
         $str = $shared_game_properties->server_time;
         $str .= ",".$shared_game_properties->apple_store_url;
-        $str .= ",".$shared_game_properties->auto_spin_min_level;
         $str .= ",".$shared_game_properties->max_level;
         $str .= ","."shabhoom_82739472973_jjkvsjm";
 

@@ -115,8 +115,8 @@ class Authenticater extends Base_Controller
         $session = $GLOBALS['session'];
 
 		$response = array();
-		$response = $this->load();
 		$response['session'] = $session;
+		$response['load_data'] = $this->load($session);
 		
         //Record a player login everytime authenticate_iphone is called.
         //record_player_login($myPlayer, $load_source, $device_type, $ios_version, $data_connection_type, $client_version, $client_build, $client_static_table_data["using"]);
@@ -144,17 +144,15 @@ class Authenticater extends Base_Controller
 
         $this->PlayerModel->save($myPlayer);
 
-        $commerce_products = $this->CommerceProductModel->load_all($myPlayer);
-        $asset_type_md5s = $this->AssetTypeMd5Model->load_all();
-        $asset_type_md5s = json_encode($asset_type_md5s);
+        //$commerce_products = $this->CommerceProductModel->load_all($myPlayer);
+        //$asset_type_md5s = $this->AssetTypeMd5Model->load_all();
+        //$asset_type_md5s = json_encode($asset_type_md5s);
 
-        //TODO - kjs - Not sure if we are using this or if we should!
         $assets_level_to_background_load = 0;
         if(is_numeric($assets_load_level) && $myPlayer->level >= 4)  {
             $assets_level_to_background_load = $assets_load_level + 5;
         }
 
-        //TODO - kjs - Not sure if we are setting up or using this correctly!
         $static_data_to_load = CURRENT_STATIC_DATA_TO_LOAD;
         debug(__FILE__, "Static data: ".CURRENT_STATIC_DATA_TO_LOAD." - ".$static_data_to_load.", client_version: ".$client_version);
         debug(__FILE__, "PLAYER_DUMP: ".json_encode($myPlayer));
@@ -167,9 +165,9 @@ class Authenticater extends Base_Controller
         $shared_game_properties->server_time_offset = (int)date('Z');
         $shared_game_properties_md5 = get_md5_for_shared_properties($shared_game_properties);
 
-        //$game_data_changes = $this->get_game_data_changes_for_ab_test($myPlayer, $client_version);
+        $game_data_changes = "";//$this->get_game_data_changes_for_ab_test($myPlayer, $client_version);
         $game_data_changes = json_encode($game_data_changes);
-        $game_data_changes_md5 = md5($game_data_changes . "asdfgpoirtyu_!@#*&^#%_vam$I");
+        $game_data_changes_md5 = md5($game_data_changes . "asdfgpoirtyu_!@#*&^#%_vam#I");
 
         $popup = NULL;
         /*if(is_null($popup)) {
@@ -192,10 +190,10 @@ class Authenticater extends Base_Controller
         //$startup_popups = get_startup_popups($myPlayer->id, $session->game_data_version, $displaying_commerce_packages);
 
         $result_array = array(
-            'asset_type_md5s' => $asset_type_md5s,
+            //'asset_type_md5s' => $asset_type_md5s,
             'assets_load_level' => $assets_level_to_background_load,
             'cdn_url' => CDN_URL,
-            'commerce_products' => $commerce_products,
+            //'commerce_products' => $commerce_products,
             'game_data_changes' => $game_data_changes,
             'game_data_changes_md5' => $game_data_changes_md5,
             'shared_game_properties' => $shared_game_properties,
@@ -205,7 +203,8 @@ class Authenticater extends Base_Controller
             'show_promo' => false,
             'popup' => $popup,
             'static_data_to_load' => $static_data_to_load,
-            'user' => $user
+            'user' => $user,
+			'player' => $myPlayer
         );
 		
         return $result_array;
