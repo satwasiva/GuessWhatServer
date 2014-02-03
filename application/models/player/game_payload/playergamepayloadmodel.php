@@ -34,7 +34,8 @@ class PlayerGamePayloadModel extends JsonModel
         if ($player_game_payload && property_exists($player_game_payload, $field))
         {
             $player_game_payload->$field = json_encode($payload);
-            $this->save($player_game_payload);
+			error_log("saving payload:".print_r($player_game_payload));
+			parent::save_as_update_where($player_game_payload, array(), FALSE, FALSE);
         }
         else
         {
@@ -82,10 +83,10 @@ class PlayerGamePayloadModel extends JsonModel
         return $puzzles_created;
     }
 
-    private function add_puzzle_created($player_id, $puzzle_created_to_set)
+    public function add_puzzle_created($player_id, $puzzle_created_to_set)
     {
         $puzzles_created = $this->get_or_create_puzzles_created($player_id);
-        $puzzles_created[] = $puzzles_created_to_set;
+        $puzzles_created[] = $puzzle_created_to_set;
         $this->set_puzzles_created($player_id, $puzzles_created);
     }
 
@@ -100,17 +101,17 @@ class PlayerGamePayloadModel extends JsonModel
 
         if (is_null($puzzles_solved)) {
             $puzzles_solved = array();
-            $this->set_puzzles_created($player_id, $puzzles_solved);
+            $this->set_puzzles_solved($player_id, $puzzles_solved);
         }
 
         return $puzzles_solved;
     }
 
-    private function add_puzzle_solved($player_id, $puzzle_solved_to_set)
+    public function add_puzzle_solved($player_id, $puzzle_solved_to_set)
     {
         $puzzles_solved = $this->get_or_create_puzzles_solved($player_id);
         $puzzles_solved[] = $puzzle_solved_to_set;
-        $this->set_puzzles_created($player_id, $puzzles_solved);
+        $this->set_puzzles_solved($player_id, $puzzles_solved);
     }
 	
     private function set_puzzles_pending($player_id, $puzzles_pending)
@@ -165,9 +166,9 @@ class PlayerGamePayloadModel extends JsonModel
 
     public function get_special_bonus($player_id) {
 
-        $ap_bonus = $this->get_game_payload_by_field($player_id, 'special_bonus');
+        $special_bonus = $this->get_game_payload_by_field($player_id, 'special_bonus');
 
-        if (json_encode($ap_bonus) == '{}' || is_null($ap_bonus) || is_int($ap_bonus)) {
+        if (json_encode($special_bonus) == '{}' || is_null($special_bonus) || is_int($special_bonus)) {
 
             // give player level 1 special bonus
             $CI =& get_instance();

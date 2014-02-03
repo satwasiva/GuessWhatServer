@@ -1,7 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/SpecialBonus.php');
 require_once(APPPATH . 'models/player/bonus/PlayerSpecialBonus.php');
-require_once(APPPATH . 'models/GameProperties.php');
+require_once(APPPATH . 'models/SharedGameProperties.php');
 require_once(COREPATH . 'models/staticmodel.php');
 
 class SpecialBonusModel extends StaticModel {
@@ -166,8 +166,8 @@ class SpecialBonusModel extends StaticModel {
                 'bonus_clock' => ($player_ap_bonus->collect_time_secs / 60),
                 'player_special_level' => $player_ap_bonus->current_level,
                 'bonus_type' => $ap_bonus_reward_type,
-                'sc1_rewarded' => $last_payout) */
-        );
+                'sc1_rewarded' => $last_payout)
+        );*/
 
         $special_bonus = $this->get_next_special_bonus_level($current_level);
 		

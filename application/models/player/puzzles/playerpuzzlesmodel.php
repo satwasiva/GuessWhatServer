@@ -2,81 +2,97 @@
 require_once(COREPATH . 'models/jsonmodel.php');
 require_once(dirname(__FILE__) .'/PlayerPuzzles.php');
 
-class PlayerGamePayloadModel extends JsonModel
+class PlayerPuzzlesModel extends JsonModel
 {
     protected $tbl_name = 'player_puzzles';
 
-    function PlayerGamePayloadModel()
+    function PlayerPuzzlesModel()
     {
-        parent::JsonModel("player", "id");
+        parent::JsonModel("player", "player_id");
     }
 
-    public function init($player_id)
+    public function add_player_puzzle($player_id, $choices, $correct_idx, $target_time, $latitude = 0, $longitude = 0)
     {
-        $player_game_payload = parent::get_object(array("id" => $player_id));
-        if (!$player_game_payload)
-        {
-            $player_game_payload = $this->create();
-            $player_game_payload->id = $player_id;
-            $player_game_payload->player_id = $player_id;
-            $player_game_payload->special_bonus = null;
-            $player_game_payload->puzzles_created = json_encode(array());
-
-            parent::save($player_game_payload, true);
-        }
+        $player_puzzle = $this->create();
+		$player_puzzle->id = md5(date('Y-m-d H:i:s'));
+        $player_puzzle->player_id = $player_id;
+        $player_puzzle->choices = $choices;
+        $player_puzzle->correct_idx = $correct_idx;
+        $player_puzzle->target_time = $target_time;
+        $player_puzzle->latitude = $latitude;
+        $player_puzzle->longitude = $longitude;
+        $player_puzzle->attempter_ids = "";
+        $player_puzzle->solver_ids = "";
+        $player_puzzle->puzzle_url = ""; // BASE_CDN + $puzzle_id
+        $this->save($player_puzzle, true);
+		
+		return $player_puzzle;
+	}
+	
+    private function client_player_puzzle_object($player_puzzle)
+    {
+        $client_player_puzzle = array();
+        return $client_player_puzzle;
     }
 
-    private function load_by_id($player_id, $unique_id)
+    public function load_by_id($player_id, $puzzle_id)
     {
-        $player_achievements = parent::get_where(array('player_id' => $player_id));
-        foreach ($player_achievements as $player_achievement)
-        {
-            if ($player_achievement->achievement_id == $unique_id)
-            {
-                return $player_achievement;
-            }
-        }
-        return null;
+        $player_puzzle = parent::get_where(array('id' => $puzzle_id, 'player_id' => $player_id));
+        return $player_puzzle;
     }
 
-    public function load_all($player_id, $only_unsent = true)
+    public function load_all($player_id)
     {
-        $client_player_achievement_objs = array();
-        $player_achievements = parent::get_where(array('player_id' => $player_id));
-        foreach ($player_achievements as $player_achievement)
-        {
-            $add_this_achievement = $only_unsent ? !$player_achievement->sent_to_apple : true;
-            if ($add_this_achievement)
-            {
-                $client_player_achievement_objs[] = $this->client_player_achievement_object($player_achievement);
-            }
-        }
-        return $client_player_achievement_objs;
+        $player_puzzles = parent::get_where(array('player_id' => $player_id));
+        
+        return $player_puzzles;
     }
 	
-    public function set_game_payload_field($player_id, $field, $payload)
+    public function set_payload_field($puzzle_id, $player_id, $field, $value)
     {
-        $player_game_payload = parent::get_object(array("id" => $player_id));
-        if ($player_game_payload && property_exists($player_game_payload, $field))
+        $puzzle = parent::get_object(array("id" => $puzzle_id, "player_id" => $player_id));
+        if ($puzzle && property_exists($puzzle, $field))
         {
-            $player_game_payload->$field = json_encode($payload);
-            $this->save($player_game_payload);
+            $puzzle->$field = json_encode($value);
+            $this->save($puzzle);
         }
         else
         {
-            warn(__FILE__, "GamePayload: No such field exist OR PlayerGame Payload is null! Field: $field");
+            warn(__FILE__, "GamePayload: No such field exist OR PlayerGame value is null! Field: $field");
         }
     }
 
-    public function get_game_payload_by_field($player_id, $field, $return_as_associateve_array = false)
-    {
-        $player_game_payload = parent::get_object(array("id" => $player_id));
-        if ($player_game_payload && property_exists($player_game_payload, $field))
+	public function set_attempter_id($puzzle_id, $player_id, $attempter_id) {
+        $puzzle = parent::get_object(array("id" => $puzzle_id, "player_id" => $player_id));
+		
+		if ($puzzle) {
+			if ($puzzle->attempter_ids == '') {
+				$puzzle->attempter_ids = $attempter_id;
+			} else {
+				$puzzle->attempter_ids .= ",".$attempter_id;
+			}
+			$this->save(puzzle);
+		}
+		else
         {
-            return json_decode($player_game_payload->$field, $return_as_associateve_array);
+            warn(__FILE__, "No such puzzle exist");
         }
-        else
+	}
+	
+	public function set_solver_id($puzzle_id, $player_id, $solver_id) {
+        $puzzle = parent::get_object(array("id" => $puzzle_id, "player_id" => $player_id));
+		
+		if ($puzzle) {
+			if ($puzzle->solver_ids == '') {
+				$puzzle->solver_ids = $solver_id;
+			} else {
+				$puzzle->solver_ids .= ",".$solver_id;
+			}
+			$this->save(puzzle);
+		}
+		else
         {
-            return array();
+            warn(__FILE__, "No such puzzle exist");
         }
-    }
+	}
+}

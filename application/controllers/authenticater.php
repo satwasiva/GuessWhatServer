@@ -16,6 +16,7 @@ class Authenticater extends Base_Controller
 		
         $this->load->helper('player_helper');
         $this->load->helper('data_helper');
+        $this->load->helper('time_helper');
 	}
 		
 	function post()

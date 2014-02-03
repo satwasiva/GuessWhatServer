@@ -123,17 +123,21 @@ abstract class BaseModel extends CI_Model {
             throw new Exception("Invalid Object Type");
         }
 
-		error_log(print_r($obj, true));
+		error_log('hello'.print_r($obj, true));
         $result = NULL;
 
         $data = $this->get_db_column_values($obj);
         if (! isset($obj->id) || $force_insert) {
 
-		error_log("data".print_r($data, true));
+		error_log("Sexy data:".print_r($data, true));
+		error_log("Sexy obj:".print_r($obj, true));
             $dbw = $this->get_db($obj);
+		error_log("Sexy dbw:".print_r($dbw, true));
             $result = $dbw->insert($this->tbl_name, $data);
+		error_log("result:".print_r($result, true));
             if ($result && ! isset($obj->id)) {
                 $obj->id = $dbw->insert_id();
+		error_log("new insert id".$obj->id);
             }
         } else {
 		error_log("forec insert".$force_insert);
@@ -152,6 +156,7 @@ abstract class BaseModel extends CI_Model {
             throw new Exception("Invalid Object Type");
         }
 
+		error_log("update Sexy obj:".print_r($obj, true));
         $params = array('id' => $obj->id);
         foreach ($extra_where_params as $key => $val) {
             $params[$key] = $val;

@@ -194,9 +194,9 @@ class Player extends PlayerBaseEntity {
     public function get_updated_client_obj_to_return() {
         //For client compatibility!
         $CI = & get_instance();
-        //$CI->load->model('player/game_payload/PlayerGamePayloadModel');
+        $CI->load->model('player/game_payload/PlayerGamePayloadModel');
         $this->money = $this->get_points();
-        //$this->game_payload = $CI->PlayerGamePayloadModel->get_client_game_payload($this->id);
+        $this->game_payload = $CI->PlayerGamePayloadModel->get_client_game_payload($this->id);
     }
 
     public function increase_experience($amount, $action, $action_detail = 'NULL')

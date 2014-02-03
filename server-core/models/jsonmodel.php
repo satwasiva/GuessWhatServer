@@ -180,18 +180,16 @@ class JsonModel extends ShardedModel
         $schema->time_updated = date('Y-m-d H:i:s');
         $obj->version = $schema->version;
 
-		error_log("saving jason model".print_r($schema, true));
+		error_log("var shard:". $this->variable_query_key ."saving jason model".print_r($schema, true));
         // add current backtrace and debuginfo into arrays
         $class_name = get_class($this);
 
         // force id to be equal to variable_query_key for player shard tables
-        if (APPLICATION_NAME !== 'modernwar' && APPLICATION_NAME !== 'crimecity') {
             if (!isset($obj->id) && $this->shard_group == 'player' && isset($obj->{$this->variable_query_key})) {
                 $obj->id = $obj->{$this->variable_query_key};
                 $schema->id = $obj->id;
                 $force_insert = true;
             }
-        }
 
         $skip_cache = false;
         $vkname = $this->variable_query_key;
@@ -210,7 +208,7 @@ class JsonModel extends ShardedModel
 
                     // only write to node if memcache works
                     if ($is_success) {
-                        $is_success = NodeWrapper::save($schema, $this->tbl_name, $this->get_db_name($variable_key_val), $this->node_transport_type, $this->node_command, $this->shard_group);
+                        //$is_success = NodeWrapper::save($schema, $this->tbl_name, $this->get_db_name($variable_key_val), $this->node_transport_type, $this->node_command, $this->shard_group);
                     }
 
                     // write to db if memcache or node fail
@@ -267,7 +265,7 @@ class JsonModel extends ShardedModel
 
                 // only write to node if memcache works
                 if ($is_success) {
-                    $is_success = NodeWrapper::save($schema,$this->tbl_name,$this->get_db($obj)->get_db_name(), $this->node_transport_type, $this->node_command, $this->shard_group);
+                    //$is_success = NodeWrapper::save($schema,$this->tbl_name,$this->get_db($obj)->get_db_name(), $this->node_transport_type, $this->node_command, $this->shard_group);
                 }
 
                 // write to db if memcache or node fail

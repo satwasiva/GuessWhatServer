@@ -23,7 +23,7 @@ class CurlTest extends CI_Controller {
 		$password = '1234';  
 		 
 		$client_identifier = array(
-			'device_idfv'	=> 'g567898056443dgfdgfgrty56565767',
+			'device_idfv'	=> '976789a56443dgfdgfgrty56565767',
 			'app_uuid'		=> '34567801234'
 		);
 		
@@ -49,21 +49,17 @@ class CurlTest extends CI_Controller {
 		
 		$this->load->library('curl');  
 		  
-		$this->curl->create('http://localhost/guesswhat/index.php/authenticater/format/json');  
-		  
-		// Optional, delete this line if your API is open  
-		//$this->curl->http_login($username, $password);  
-		  
+		$this->curl->create('http://localhost/guesswhat/index.php/authenticater/format/json');
 		$this->curl->post(array(  
 			'client_identifier' => $client_identifier,  
 			'client_metadata' => $client_metadata  
-		));  
-		  
+		));
 		$result = $this->curl->execute();
   
 		if($result !== null)  
 		{
 			echo 'User has been updated.';
+			$result_arr = json_decode($result);
 			echo $result;
 		}
 		else

@@ -7,7 +7,7 @@ require_once(COREPATH . 'models/baseentity.php');
      * @package DataModel
      *
      */
-class AppointmentBonus extends BaseEntity {
+class SpecialBonus extends BaseEntity {
 
     public $_explicitType = 'bonus.SpecialBonus';
 

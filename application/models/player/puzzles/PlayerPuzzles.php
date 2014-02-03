@@ -25,7 +25,7 @@ class PlayerPuzzles extends PlayerBaseEntity
 
 	public $puzzle_url;
 	public $choices;
-	public correct_answer_index;
+	public $correct_answer_index;
 	public $solver_ids;
 	public $attempter_ids;
 	public $target_solve_time;

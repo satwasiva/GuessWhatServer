@@ -15,7 +15,7 @@ class PlayerModel extends JsonModel {
 
     function PlayerModel() {
         parent::JsonModel("player", "id");
-        //$this->load->model('player/game_payload/PlayerGamePayloadModel');
+        $this->load->model('player/game_payload/PlayerGamePayloadModel');
     }
 
     function create() {
@@ -69,7 +69,7 @@ class PlayerModel extends JsonModel {
             $player->entry_source = $entry_source;
 
             // Creating player game payload object when we create player.
-            //$this->PlayerGamePayloadModel->init($player->id);
+            $this->PlayerGamePayloadModel->init($player->id);
 
             $last_game_load_time = $player->last_game_load_time;
             if($last_game_load_time == 0){

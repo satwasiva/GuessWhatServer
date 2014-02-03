@@ -20,6 +20,7 @@ class ShardMapModel extends StaticModel {
         foreach ($shards as $shard) {
             //log_message('info', "Checking shard " . $shard->position . " " . $shard->start_id . " " . $shard->end_id);
             if ($shard->contains($partition_value)) {
+				error_log("Shard info:".print_r($shard, true));
                 return $shard;
             }
         }

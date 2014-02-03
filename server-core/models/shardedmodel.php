@@ -9,11 +9,13 @@ class ShardedModel extends BaseModel {
     function ShardedModel($shard_group, $partition_db_field) {
         parent::BaseModel();
         $this->partition_db_field = $partition_db_field;
+		error_log("pf field1:".$this->partition_db_field);
         $this->shard_group = $shard_group;
     }
 
     protected function get_db($obj) {
         $pf = $this->partition_db_field;
+		error_log("pf field2:".$this->partition_db_field);
         return $this->db($obj->$pf);
     }
 
