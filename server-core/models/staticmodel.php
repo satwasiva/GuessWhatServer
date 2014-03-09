@@ -5,66 +5,118 @@ require_once(COREPATH . 'database/DbConnManager.php');
 require_once(COREPATH . '/cache/ApcCacheDataStore.php');
 require_once(COREPATH . '/cache/LocalCacheDataStore.php');
 
-class StaticModel extends BaseModel {
-
+class StaticModel extends BaseModel
+{
     private $database_config_name;
     private $apc_cache;
     public $md5;
 
-    function StaticModel($db_config_name) {
-        parent::BaseModel();
+	/**
+	 *  Constructor
+	 */
+    function __construct($db_config_name)
+	{
+        parent::__construct();
         $this->database_config_name = $db_config_name;
         $this->apc_cache = ApcCacheDataStore::get_cache();
         $this->local_cache = LocalCacheDataStore::get_cache('static');
         $this->md5 = $this->compute_md5();
     }
 
-    protected function get_db($obj) {
+	/**
+	 *  Get DB connection manager
+	 * TODO - vamsi - remove obj parameter. Not needed?
+	 * @return DBConnManager
+	 */	
+    protected function get_db($obj)
+	{
         return DbConnManager::get_db_conn($this->database_config_name);
     }
-
-    private function get_default_db() {
+	
+	/**
+	 * Get default db
+	 * @return DBConnManager
+	 */
+    private function get_default_db()
+	{
         return $this->get_db(NULL);
     }
-
-    private function id_cache_key($table, $id) {
+	
+	/**
+	 * Get id cache key for given table and id value concatenated to string
+	 * @param String $table
+	 * @param String $id
+	 * @return String $key
+	 */
+    private function id_cache_key($table, $id)
+	{
         return $table . ":id:" . $id;
     }
-
-    private function static_cache_key($table, $where_params, $orderby_params) {
+	
+	/**
+	 * Get static cache key value from given table, where and order by params 
+	 * after concatenating all keys and values to a string
+	 * @param String $table
+	 * @param Dictionary $where_params
+	 * @param Dictionary $orderby_params
+	 * @return String key
+	 */
+    private function static_cache_key($table, $where_params, $orderby_params)
+	{
         $key = $table;
-        if (! is_null($where_params)) {
+        if (!is_null($where_params))
+		{
+			// Where by params are not null
             ksort($where_params);
-            foreach ($where_params as $k => $v) {
+            foreach ($where_params as $k => $v)
+			{
                 $key = $key . ":" . $k . ":" . $v;
             }
         }
-        if (! is_null($orderby_params)) {
+        if (!is_null($orderby_params))
+		{
+			// Order by params are not null
             ksort($orderby_params);
             $key = $key . ":ob";
-            foreach ($orderby_params as $k => $v) {
+            foreach ($orderby_params as $k => $v)
+			{
                 $key = $key . ":" . $k . ":" . $v;
             }
         }
         return $key;
     }
-
-
-    public function get($id) {
+	
+	/**
+	 * Get object from cache
+	 * @param String $id
+	 * @return Object $obj
+	 */
+    public function get($id)
+	{
         $key = $this->id_cache_key($this->tbl_name, $id);
         $obj = $this->cache_get($key);
-        if (is_null($obj)) {
+        if (is_null($obj))
+		{
+			// obj is null, get from default db and put in cache
             $obj = parent::get($this->get_default_db(), $id);
             $this->cache_put($key, $obj);
         }
         return $obj;
     }
 
-    public function get_where($query_params, $ttl = 0) {
+	/**
+	 * Get object from cache with query parameters
+	 * @param Array $query_parameters
+	 * @param int $ttl
+	 * @return Object $obj
+	 */
+    public function get_where($query_params, $ttl = 0)
+	{
         $key = $this->static_cache_key($this->tbl_name, $query_params, NULL);
         $results =  $this->cache_get($key);
-        if (is_null($results)) {
-
+        if (is_null($results))
+		{
+			// obj is null, get from default db and put in cache
             $dbw = DbConnManager::get_db_conn($this->database_config_name);
             $query = $dbw->get_where($this->tbl_name, $query_params);
             $results = $this->_map_to_objlist($query->result());
@@ -74,10 +126,19 @@ class StaticModel extends BaseModel {
         return $results;
     }
 
-    public function get_all($ttl = 0) {
+	/**
+	 * Get all objects from cache
+	 * @param Array $query_parameters
+	 * @param int $ttl
+	 * @return Object $obj
+	 */
+    public function get_all($ttl = 0)
+	{
         $key = $this->tbl_name . ":all";
         $results =  $this->cache_get($key);
-        if (is_null($results)) {
+        if (is_null($results))
+		{
+			// results is null, get db  for the config name and put in cache
             $dbw = DbConnManager::get_db_conn($this->database_config_name);
             $query = $dbw->get($this->tbl_name);
             $results = $this->_map_to_objlist($query->result());
@@ -94,9 +155,7 @@ class StaticModel extends BaseModel {
     	if(is_null($query_params))
     	{
     		$results = $this->get_all();
-    	}
-    	else
-    	{
+    	} else {
     		$results = $this->get_where($query_params);
     	}
     	foreach($results as $result)
@@ -111,24 +170,30 @@ class StaticModel extends BaseModel {
     }
 
 
-    public function get_where_orderby($where_params, $orderby) {
+    public function get_where_orderby($where_params, $orderby)
+	{
         $success = false;
         $key = $this->static_cache_key($this->tbl_name, $where_params, $orderby);
         $results = $this->cache_get($key);
-        if (is_null($results)) {
+        if (is_null($results))
+		{
             $dbw = $this->get_default_db();
             $dbw->from($this->tbl_name);
-            if (! is_null($where_params)) {
+            if (! is_null($where_params))
+			{
                 $dbw->where($where_params);
             }
-            foreach ($orderby as $k => $v) {
+            
+			foreach ($orderby as $k => $v)
+			{
                 //log_message('info', "ORDER " . $k . "  " . $v);
        	        $dbw->order_by($k, $v);
             }
-            $query = $dbw->get();
+            
+			$query = $dbw->get();
             $results = $this->_map_to_objlist($query->result());
 
-            // TODO - alk - log error if still no results
+            // TODO - log error if still no results
             $this->cache_put($key, $results);
         }
         return $results;
@@ -141,12 +206,14 @@ class StaticModel extends BaseModel {
      * @param $ttl
      * @return void
      */
-    protected function cache_put($key, $data, $ttl = 0) {
+    protected function cache_put($key, $data, $ttl = 0)
+	{
         $this->apc_cache->put($key, $data, $ttl);
         $this->local_cache->put($key, $data, $ttl);
     }
 
-    protected function apc_cache_put($key, $data, $ttl = 0) {
+    protected function apc_cache_put($key, $data, $ttl = 0)
+	{
     	$this->apc_cache->put($key, $data, $ttl);
     }
 
@@ -157,24 +224,31 @@ class StaticModel extends BaseModel {
      * @param $key
      * @return null
      */
-    protected function cache_get($key) {
+    protected function cache_get($key)
+	{
         $data = $this->local_cache->get($key);
-        if (!is_null($data)) {
+        if (!is_null($data))
+		{
             return $data;
         }
-        $data = $this->apc_cache->get($key);
-        if (!is_null($data)) {
+        
+		$data = $this->apc_cache->get($key);
+        if (!is_null($data))
+		{
             $this->local_cache->put($key, $data);
         }
-        return $data;
+        
+		return $data;
     }
 
-    protected function apc_cache_get($key) {
+    protected function apc_cache_get($key)
+	{
     	$data = $this->apc_cache->get($key);
     	return $data;
     }
 
-    protected function get_where_nocache($query_params) {
+    protected function get_where_nocache($query_params)
+	{
         $query = $this->get_default_db()->get_where($this->tbl_name, $query_params);
         $results = $this->_map_to_objlist($query->result());
         return $results;
@@ -203,7 +277,7 @@ class StaticModel extends BaseModel {
     		$sig = md5($table);
     		//debug(__FILE__, $this->tbl_name . ' md5=' . $sig);
     		$this->cache_put($key, $sig);
-    		return md5($table);
+    		return $sig;
         }
     	return $result;
     }

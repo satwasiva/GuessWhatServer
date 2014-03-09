@@ -3,13 +3,9 @@ require_once(COREPATH . '/models/baseentity.php');
 
 /**
  * This class stores the information needed to reference a player's currently active session on the server.
- *
- * @package DataModel
- *
- *
  */
-class Session extends BaseEntity {
-
+class Session extends BaseEntity
+{
     public $_explicitType = 'Session';
 
     public $transaction_time;
@@ -24,16 +20,21 @@ class Session extends BaseEntity {
     public $game_name;
     public $game_data_version;
     public $seconds_from_gmt;
-	
-    function Session() {
-        parent::BaseEntity();
-    }
 
+	/*
+	 * Constructor
+	 */
 	public function __construct()
 	{
-		parent::BaseEntity();
+		parent::__construct();
 	}
 	
+	/*
+	 * A utility function for setting session object members
+	 *
+	 * @param session_array (Array)
+	 * @return void
+	 */
 	public function make_object_from_array($session_array)
 	{
 		$this->ios_idfv = $session_array['ios_idfv'];

@@ -4,15 +4,12 @@ require_once(COREPATH . 'models/baseentity.php');
 /**
  * This class represents an item that a player owns.
  *
- * @package DataModel
- *
- *
  */
-class PlayerBaseEntity extends BaseEntity {
-
+class PlayerBaseEntity extends BaseEntity
+{
     public $id;
-    public $database_id;
-    public $unique_id;
+//    public $database_id;
+//    public $unique_id;
     public $player_id;
     public $payload;
     public $time_created;
@@ -28,12 +25,12 @@ class PlayerBaseEntity extends BaseEntity {
     	"version" 					=> array("int", 0, false)
     );
 
-    function PlayerBaseEntity() {
-        parent::BaseEntity();
+    function __construct()
+	{
+        parent::__construct();
         $sDate = date('Y-m-d H:i:s');
         $this->time_created = $sDate;
         $this->time_updated = $sDate;
         $this->version = 0;
     }
-
 }

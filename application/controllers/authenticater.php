@@ -18,7 +18,7 @@ class Authenticater extends Base_Controller
         $this->load->helper('data_helper');
         $this->load->helper('time_helper');
 	}
-		
+	
 	function post()
 	{
 		$data = $this->_post_args;
@@ -29,7 +29,7 @@ class Authenticater extends Base_Controller
 		$app_uuid = $client_identifier['app_uuid'];
 		
         $client_version = $client_metadata['client_version'];
-        if (array_key_exists('device_type' , $client_metadata)){
+        if (array_key_exists('device_type' , $client_metadata)) {
             $device_type = $client_metadata['device_type'];
         } else {
             $device_type = 'unknown';
@@ -84,7 +84,7 @@ class Authenticater extends Base_Controller
                         $client_version, $device_type, $ios_version,
                         $data_connection_type, $app_uuid,
                         $client_build, $seconds_from_gmt, $os_type);
-        }catch(Exception $exception){
+        } catch(Exception $exception) {
             error(__FILE__, "CREATE PLAYER FAILED. ID COLLISION 5 TIMES. This should not happen. Message:" . $exception->getMessage());
 			return $this->response(array('success'=> false, 'reason' => 'CREATE ID FAILED BECAUSE OF COLLISIONS'), 404);
         }

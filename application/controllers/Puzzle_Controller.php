@@ -87,6 +87,12 @@ class Puzzle_Controller extends Base_Controller
 	
 	function update_puzzle_solvers()
 	{
+		$puzzle_id = $puzzle_info['puzzle_id'];
+		$player_id = $puzzle_info['player_id'];
+		$solver_id = $puzzle_info['solver_id'];
+		$this->PlayerPuzzlesModel->set_solver_id($puzzle_id, $player_id, $solver_id);
+		
+		$this->PlayerGamePayloadModel->add_puzzle_solved($solver_id, $puzzle_id);
 	}
 	
 	function update_puzzle_attempters($puzzle_info)
