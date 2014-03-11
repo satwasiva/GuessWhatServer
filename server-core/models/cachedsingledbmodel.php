@@ -15,7 +15,7 @@ class CachedSingleDbModel extends BaseModel
 	protected $cache_keys;
     protected $expiry; //default to 0, which means no expiration, number of seconds to cache
     
-    function CachedSingleDbModel($db_config_name, $variable_query_keys=NULL, $write_through = FALSE, $memcached_pool = "player", $expiry = 0)
+    function __construct($db_config_name, $variable_query_keys=NULL, $write_through = FALSE, $memcached_pool = "player", $expiry = 0)
     {
     	if(!is_null($variable_query_keys))
     	{
@@ -28,7 +28,7 @@ class CachedSingleDbModel extends BaseModel
     	}
         else
         {
-        	parent::BaseModel();
+        	parent::__construct();
         }
         $this->database_config_name = $db_config_name;
     }

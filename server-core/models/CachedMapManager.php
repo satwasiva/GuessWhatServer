@@ -9,7 +9,7 @@ class CachedMapManager
     private static $instance;
     private $maps;
 
-    private function CachedMapManager() {
+    private function __construct() {
         $this->maps = array();
     }
 

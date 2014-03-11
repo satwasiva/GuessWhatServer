@@ -6,9 +6,9 @@ class UserModel extends SingleDbModel {
 
     protected $tbl_name = 'user';
 
-    function UserModel()
+    function __construct()
     {
-        parent::SingleDbModel("user");
+        parent::__construct("user");
     }
 
     //deprecated method, use generate_player_id

@@ -7,8 +7,8 @@ class LevelModel extends StaticModel {
 
     protected $tbl_name = 'level';
 
-    function LevelModel() {
-        parent::StaticModel("default");
+    function __construct() {
+        parent::__construct("default");
     }
 
     public function get_level_id_to_level_map($use_ab_test_game_data)

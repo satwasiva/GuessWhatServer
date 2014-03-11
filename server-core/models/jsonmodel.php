@@ -19,9 +19,9 @@ class JsonModel extends ShardedModel
      * NOTE:  All cacheable tables must have an id field as their primary key, and a version field if they want to use write-through caching.
      * TODO:  Enforce that somewhere.
      */
-    function JsonModel($shard_group, $variable_query_key)
+    function __construct($shard_group, $variable_query_key)
     {
-        parent::ShardedModel($shard_group, $variable_query_key);
+        parent::__construct($shard_group, $variable_query_key);
         $this->variable_query_key = $variable_query_key;
         //$this->cache = new CacheDataStore('player_obj');
         $this->local_cache = LocalCacheDataStore::get_cache('player_obj');

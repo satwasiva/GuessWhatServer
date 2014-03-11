@@ -54,8 +54,8 @@ class Player extends PlayerBaseEntity {
         "package_name"                  => array("string", "none", false),
     );
 
-    function Player() {
-        parent::PlayerBaseEntity();
+    function __construct() {
+        parent::__construct();
     }
 
     public $invite_code;

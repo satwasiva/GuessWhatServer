@@ -6,9 +6,9 @@ class PlayerPuzzlesModel extends JsonModel
 {
     protected $tbl_name = 'player_puzzles';
 
-    function PlayerPuzzlesModel()
+    function __construct()
     {
-        parent::JsonModel("player", "player_id");
+        parent::__construct("player", "player_id");
     }
 
     public function add_player_puzzle($player_id, $choices, $correct_idx, $target_time, $latitude = 0, $longitude = 0)

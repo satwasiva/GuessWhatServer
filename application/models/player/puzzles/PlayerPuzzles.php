@@ -32,8 +32,8 @@ class PlayerPuzzles extends PlayerBaseEntity
 	public $latitude;
 	public $longitude;
 	
-    function PlayerPuzzles()
+    function __construct()
     {
-        parent::PlayerBaseEntity();
+        parent::__construct();
     }
 }

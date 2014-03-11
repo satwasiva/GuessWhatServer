@@ -13,8 +13,8 @@ class PlayerModel extends JsonModel {
 
     protected $tbl_name = 'player';
 
-    function PlayerModel() {
-        parent::JsonModel("player", "id");
+    function __construct() {
+        parent::__construct("player", "id");
         $this->load->model('player/game_payload/PlayerGamePayloadModel');
     }
 

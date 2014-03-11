@@ -10,9 +10,9 @@ class SpecialBonusModel extends StaticModel {
     public $special_bonus_key = 'special_bonus';
     public $default_level = 0;
 
-    function SpecialBonusModel()
+    function __construct()
     {
-        parent::StaticModel("default");
+        parent::__construct("default");
     }
 
     public function create()

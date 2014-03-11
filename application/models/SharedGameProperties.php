@@ -46,8 +46,8 @@ class SharedGameProperties extends BaseEntity {
     public $ios_sales_subtitle = 'LIMITED TIME ONLY!';
     public $ios_sales_body = 'Save 30% or more when you buy coins';
 
-	function SharedGameProperties() {
-		parent::BaseEntity();
+	function __construct() {
+		parent::__construct();
 	}
 
 	public static function get_instance() {

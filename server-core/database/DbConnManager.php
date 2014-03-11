@@ -21,7 +21,7 @@ class DbConnManager {
             }
 
             $database_name = $db_info['database'];
-		error_log("conn config ".$db_name);
+		error_log("conn config ".$database_name);
             $CI = & get_instance();
             $db = $CI->load->database($db_name, TRUE);
             $db_info = $GLOBALS['db_config'][$db_name];

@@ -24,8 +24,8 @@ class PlayerGamePayload extends PlayerBaseEntity
     public $puzzles_solved;
     public $puzzles_pending;
 
-    function PlayerGamePayload()
+    function __construct()
     {
-        parent::PlayerBaseEntity();
+        parent::__construct();
     }
 }

@@ -25,8 +25,8 @@ class MemcachedModel extends ShardedModel {
      * NOTE:  All cacheable tables must have an id field as their primary key, and a version field if they want to use write-through caching.
      * TODO:  Enforce that somewhere.
      */
-    function MemcachedModel($shard_group, $variable_query_key, $supported_extra_params, $write_through = TRUE, $memcached_pool = NULL, $use_node_mysql = TRUE, $node_transport_type = "tcp") {
-        parent::ShardedModel($shard_group, $variable_query_key);
+    function __construct($shard_group, $variable_query_key, $supported_extra_params, $write_through = TRUE, $memcached_pool = NULL, $use_node_mysql = TRUE, $node_transport_type = "tcp") {
+        parent::__construct($shard_group, $variable_query_key);
         $this->variable_query_key = $variable_query_key;
         $this->supported_extra_params = $supported_extra_params;
         $this->cache_keys = $this->generate_keys($this->supported_extra_params);

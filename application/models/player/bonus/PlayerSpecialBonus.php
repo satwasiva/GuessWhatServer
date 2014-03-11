@@ -11,7 +11,7 @@ class PlayerSpecialBonus {
     public $total_collection;
     public $payout;
 
-    public function PlayerSpecialBonus($special_bonus, $total_collection_count, $collectable, $last_payout) {
+    public function __construct($special_bonus, $total_collection_count, $collectable, $last_payout) {
         $sDate = date('Y-m-d H:i:s');
         $this->id = $special_bonus->id;
         $this->last_collect_time = $sDate;

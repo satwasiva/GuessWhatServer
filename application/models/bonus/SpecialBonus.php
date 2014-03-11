@@ -31,8 +31,8 @@ class SpecialBonus extends BaseEntity {
     public $bonus_collect_coins_payout;
     public $bonus_collect_coins_percent_payout;
 
-    function SpecialBonus()
+    function __construct()
     {
-        parent::BaseEntity();
+        parent::__construct();
     }
 }

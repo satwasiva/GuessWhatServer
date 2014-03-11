@@ -39,8 +39,8 @@ class User extends BaseEntity {
     	"version"               => array("int", "none", false)
     );
 
-    function User() {
-        parent::BaseEntity();
+    function __construct() {
+        parent::__construct();
     }
 
     public $id;

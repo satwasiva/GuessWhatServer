@@ -30,8 +30,8 @@ class Level extends BaseEntity {
     public $exp_increment;
     public $welcome_reward;
 
-	function Level() {
-        parent::BaseEntity();
+	function __construct() {
+        parent::__construct();
     }
 
     public function sort_asc($level1, $level2)

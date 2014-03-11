@@ -6,9 +6,9 @@ class PlayerGamePayloadModel extends JsonModel
 {
     protected $tbl_name = 'player_game_payload';
 
-    function PlayerGamePayloadModel()
+    function __construct()
     {
-        parent::JsonModel("player", "id");
+        parent::__construct("player", "id");
     }
 
     public function init($player_id)

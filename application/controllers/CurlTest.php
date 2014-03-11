@@ -49,7 +49,7 @@ class CurlTest extends CI_Controller {
 		
 		$this->load->library('curl');  
 		  
-		$this->curl->create('http://localhost/guesswhat/index.php/authenticater/format/json');
+		$this->curl->create('http://localhost:8090/www/index.php/authenticater/format/json');
 		$this->curl->post(array(  
 			'client_identifier' => $client_identifier,  
 			'client_metadata' => $client_metadata  

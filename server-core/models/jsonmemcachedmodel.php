@@ -19,9 +19,9 @@ class JsonMemcachedModel extends MemcachedModel
      * NOTE:  All cacheable tables must have an id field as their primary key, and a version field if they want to use write-through caching.
      * TODO:  Enforce that somewhere.
      */
-    function JsonMemcachedModel($shard_group, $variable_query_key, $supported_extra_params, $unique_field=NULL)
+    function __construct($shard_group, $variable_query_key, $supported_extra_params, $unique_field=NULL)
     {
-        parent::MemcachedModel($shard_group, $variable_query_key, $supported_extra_params);
+        parent::__construct($shard_group, $variable_query_key, $supported_extra_params);
         $this->unique_field = $unique_field;
     }
 
