@@ -40,8 +40,8 @@ $active_record = TRUE;
 
 if (! function_exists('configure_database')) {
     function configure_database(&$ci_db_configuration, $db_config_name, $db_config) {
-        $username = "guesswhat_user";
-        $password = "uGuuueusus";
+        $username = "vamsi";
+        $password = '$mrinvam1';
 
         $hostname = $db_config[0];
         $database_name = $db_config[1];
