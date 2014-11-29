@@ -40,8 +40,8 @@ $active_record = TRUE;
 
 if (! function_exists('configure_database')) {
     function configure_database(&$ci_db_configuration, $db_config_name, $db_config) {
-        $username = "vamsi";
-        $password = "vamrina1";
+        $username = "sagar";
+        $password = "$agar)(*";
 
         $hostname = $db_config[0];
         $database_name = $db_config[1];
@@ -73,14 +73,7 @@ if (isset($GLOBALS['db_config'])) {
 }
 
 $unsharded_dbs = array(
-    "default" => array("localhost", "guesswhat_static_ios"),
-    "default_slave" => array("localhost", "guesswhat_static_ios"),
-    "user" => array("localhost", "guesswhat_user_1"),
-    "user_slave" => array("localhost", "guesswhat_user_1"),
-    "sharded_db" => array("localhost","sharded_db"),
-    "sharded_db_slave" => array("localhost","sharded_db"),
-    "player_request" => array("localhost", "guesswhat_request"),
-    "player_request_slave" => array("localhost", "guesswhat_request")
+    "default" => array("localhost", "puzzle"),
 );
 
 
@@ -88,57 +81,6 @@ foreach ($unsharded_dbs as $db_cfg_name => $single_db) {
     configure_database($db, $db_cfg_name, $single_db);
 }
 
-$unsharded_backup_dbs = array(
-    "user_backup" => array("localhost", "guesswhat_user_backup"),
-);
-
-foreach ($unsharded_backup_dbs as $db_cfg_name => $single_db) {
-    configure_database($db, $db_cfg_name, $single_db);
-}
-
-$shard_groups = array(
-    "player" => array(
-        array("localhost", "guesswhat_player_1"),
-        array("localhost", "guesswhat_player_2")
-    ),
-    "notification" => array(
-        array("localhost", "guesswhat_notifications_1")
-    )
-);
-
-$shard_slave_groups = array(
-    "player" => array(
-        array("localhost", "guesswhat_player_1"),
-        array("localhost", "guesswhat_player_2")
-    ),
-    "notification" => array(
-        array("localhost", "guesswhat_notifications_1")
-    )
-);
-
-$shard_backup_groups = array(
-    "player" => array(
-        array("localhost", "guesswhat_player_1_backup")
-    )
-);
-
-foreach ($shard_groups as $group_name => $group_dbs) {
-    for ($i = 0; $i < sizeof($group_dbs); $i++) {
-        configure_database($db, 'shard_' . $group_name . $i, $group_dbs[$i]);
-    }
-}
-
-foreach ($shard_slave_groups as $group_name => $group_dbs) {
-    for ($i = 0; $i < sizeof($group_dbs); $i++) {
-        configure_database($db, 'shard_slave_' . $group_name . $i, $group_dbs[$i]);
-    }
-}
-
-foreach ($shard_backup_groups as $group_name => $group_dbs) {
-    for ($i = 0; $i < sizeof($group_dbs); $i++) {
-        configure_database($db, 'shard_' . $group_name . $i . '_backup', $group_dbs[$i]);
-    }
-}
 
 $GLOBALS['db_config'] = $db;
 $GLOBALS['UNSHARDED_DBS'] = $unsharded_dbs;
