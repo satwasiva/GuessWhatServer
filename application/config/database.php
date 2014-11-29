@@ -41,7 +41,7 @@ $active_record = TRUE;
 if (! function_exists('configure_database')) {
     function configure_database(&$ci_db_configuration, $db_config_name, $db_config) {
         $username = "sagar";
-        $password = "$agar)(*";
+        $password = "\$agar)(*";
 
         $hostname = $db_config[0];
         $database_name = $db_config[1];
@@ -73,7 +73,7 @@ if (isset($GLOBALS['db_config'])) {
 }
 
 $unsharded_dbs = array(
-    "default" => array("localhost", "puzzle"),
+    "default" => array("localhost", "guesswhat"),
 );
 
 
@@ -84,10 +84,6 @@ foreach ($unsharded_dbs as $db_cfg_name => $single_db) {
 
 $GLOBALS['db_config'] = $db;
 $GLOBALS['UNSHARDED_DBS'] = $unsharded_dbs;
-$GLOBALS['UNSHARDED_BACKUP_DBS'] = $unsharded_backup_dbs;
-$GLOBALS['SHARD_GROUPS'] = $shard_groups;
-$GLOBALS['SHARD_SLAVE_GROUPS'] = $shard_slave_groups;
-$GLOBALS['SHARD_BACKUP_GROUPS'] = $shard_backup_groups;
 
 /* End of file database.php */
 /* Location: ./system/application/config/database.php */
